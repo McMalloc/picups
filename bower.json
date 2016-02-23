@@ -1,0 +1,24 @@
+{
+  "name": "picup",
+  "authors": [
+    "Robert Wlcek <robert.wlcek@googlemail.com>"
+  ],
+  "description": "server and webapp for remote using printer and scanner connected to low energy profile computers (raspberry pi)",
+  "main": "",
+  "moduleType": [],
+  "license": "CC-BY",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "",
+    "lodash": "",
+    "backbone": ""
+  }
+}

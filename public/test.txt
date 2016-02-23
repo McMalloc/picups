@@ -1,0 +1,10 @@
+# encoding: UTF-8
+require 'sinatra'
+
+set :bind, '0.0.0.0'
+ 
+get '/' do
+#  @ret = %x(scanimage --progress > test_web &)
+  @ret = "null"
+    return @ret
+end

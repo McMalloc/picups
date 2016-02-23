@@ -1,0 +1,7 @@
+Scanning 1 pages, incrementing by 1, numbering from 1
+Scanning page 1
+scanimage: scanning image of size 202x150 pixels at 24 bits/pixel
+scanimage: acquiring RGB frame
+Progress: 0.7%Progress: 6.7%Progress: 7.3%Progress: 14.0%Progress: 14.7%Progress: 20.7%Progress: 21.3%Progress: 28.0%Progress: 28.7%Progress: 29.3%Progress: 30.0%Progress: 30.7%Progress: 35.3%Progress: 36.0%Progress: 42.0%Progress: 42.7%Progress: 49.3%Progress: 50.0%Progress: 50.7%Progress: 51.3%Progress: 52.0%Progress: 52.7%Progress: 53.3%Progress: 54.0%Progress: 56.7%Progress: 57.3%Progress: 58.0%Progress: 58.7%Progress: 63.3%Progress: 64.0%Progress: 70.7%Progress: 71.3%Progress: 78.0%Progress: 78.7%Progress: 83.3%Progress: 84.7%Progress: 85.3%Progress: 92.0%Progress: 92.7%Progress: 99.3%Progress: 100.0%Progress: 100.0%scanimage: min/max graylevel value = 187/255
+scanimage: read 90900 bytes in total
+Scanned page 1. (scanner status = 5)
