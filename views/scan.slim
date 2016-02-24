@@ -1,2 +1,30 @@
 h1 Scannen
-p 
+
+div
+  form#scanform method="post" action="scanimage"
+    p
+      label for="name-input" Name des Dokuments
+      br
+      input#name-input type="text" name="name"
+      br
+    p
+      label for="batchcount-input" Anzahl der Scans
+      br
+      input#batchcount-input type="text" name="batchcount"
+      br
+    p
+      label for="dpi-select" Auflösung
+      br
+      select#dpi-select name="dpi-select"
+        option value="72" Niedrig (72 dpi)
+        option value="150" Mittel (150 dpi)
+        option selected="selected" value="300" Hoch (300 dpi)
+        option value="600" Ultrahoch (600 dpi)
+    p
+      button type="submit" value="submit" id="start-scan-btn" Scannen
+  p Der Scanner erzählt von seiner Arbeit:
+  pre#progress noch kein Job angelaufen
+  div#progress-bar
+  div#progress-bar-ref
+
+script type="application/javascript" src="scan.js"
