@@ -2,10 +2,14 @@ doctype html
 html
   head
     title RPi Scan
+    meta name="viewport" content="width=device-width,initial-scale=1"
     script type="application/javascript" src="components/jquery/dist/jquery.js"
-    script type="application/javascript" src="components/lodash/dist/lodash.js"
-    script type="application/javascript" src="components/backbone/backbone.js"
-    script type="application/javascript" src="components/backbone/backbone.js"
+    script type="application/javascript" src="components/moment/moment.js"
+    script type="application/javascript" src="components/moment/locale/de.js"
+
+    link rel="stylesheet" type="text/css" href="components/normalize.css"
+    link rel="stylesheet" type="text/css" href="components/gridism/gridism.css"
+    link rel="stylesheet" type="text/css" href="components/fontawesome/css/font-awesome.css"
     link rel="stylesheet" type="text/css" href="main.css"
   body
     == yield

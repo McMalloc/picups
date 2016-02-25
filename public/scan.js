@@ -1,17 +1,12 @@
 var app = app || {};
 
 $(function() {
-	app.ScanView = Backbone.View.extend({
-		initialize: function(){
-		}
-	});
-
-	app.scanview = new app.ScanView();
 
 	app.batchcount = 0;
 
 	$('#scanform').submit(function () {
 		var self = this;
+		$(".spinner").removeClass("dontdisplay");
 		if ((self[1].value > 0) && (self[1].value < 100)) {
 			app.batchcount = parseInt(self[1].value);
 		} else {
@@ -29,8 +24,6 @@ $(function() {
 	});
 
 	app.queryProgress = function(url) {
-		$("#progress").text("Scanner wärmt auf");
-		var progressregex = new RegExp(/\d+.\d+%/g);
 		var interval = setInterval(function() {
 			$.get(url, {cache: false}).success(function(data) {
 
@@ -44,9 +37,13 @@ $(function() {
 					app.batchcount--;
 					if (app.batchcount === 0) {
 						clearInterval(interval);
-						setTimeout(function() {
-							window.location.pathname = "/scannedfiles"
-						}, 500)
+						$(".spinner").addClass("dontdisplay");
+						$.get("scannedfiles", function(data) {
+							$("#scannedfiles").html(data);
+						});
+						//setTimeout(function() {
+						//	window.location.pathname = "/scannedfiles"
+						//}, 500)
 					}
 
 				}

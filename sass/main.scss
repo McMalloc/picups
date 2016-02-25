@@ -1,0 +1,106 @@
+@import "vars.scss";
+
+h1, h2, h3 {
+  color: deeppink;
+}
+
+//body {
+//  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAYAAABmBXS+AAAAYElEQVQYV2P89OnTfwYomHF4AUOYth+DkJAQTAhMMyLzurZO+g9TxMfHB5cjThFIN7JpIJNWXd2Eat2DBw9QFKHIQjmMyA5HVwDzCIqb0BXBPEKcInSHo5sG8ggjMQ4HAE6oLWojbxWnAAAAAElFTkSuQmCC) repeat;
+//}
+
+.spinner {
+  width: 100%;
+  text-align: center;
+}
+
+.dontdisplay {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+  color: deeppink;
+
+  &:hover {
+    border-bottom: 1px solid deeppink;
+  }
+
+  &:visited {
+    color: darkgray;
+  }
+}
+
+#progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #111;
+  -webkit-transition: width 0.4s;
+  transition: width 0.2s;
+}
+
+#progress-bar-ref {
+  width: 100%;
+  border-top: 1px solid #9C9C9C;
+}
+
+pre {
+  word-break: break-all;
+  background-color: #f3f3f3;
+  padding: 8px;
+  font-size: 12px;
+  /*box-shadow: inset 2px 2px 7px #eee;*/
+}
+
+table {
+  border-collapse: collapse;
+  border: 0;
+  width: 100%;
+
+  button {
+    width: 100%;
+    margin-bottom: 12px;
+    visibility: hidden;
+    height: 50%;
+  }
+
+  .td-on-hover {
+    color: #ddd;
+  }
+
+  thead tr {
+    &:hover {
+      background-color: white;
+    }
+  }
+
+  th {
+    text-align: left;
+  }
+
+  td {
+    padding: 5px 8px 3px 0;
+    vertical-align: top;
+  }
+
+  tr {
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #F2E9E1;
+
+      .td-on-hover {
+        color: black;
+      }
+
+      button {
+        visibility: visible;
+      }
+    }
+  }
+}
+
+/*tr:nth-child(even) {*/
+/*background-color: #F2E9E1;*/
+/*}*/

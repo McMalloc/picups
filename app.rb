@@ -2,17 +2,15 @@
 require 'sinatra'
 require 'json'
 require 'slim'
+require 'mini_magick'
 
 set :bind, '0.0.0.0'
 
 post '/scanimage' do
-#  @request_payload = JSON.parse request.body.read
   logger.info "Incoming: #{params}"
   
   @filename = generate_filename params[:name]
-#  @filename = @request_payload["name"]
   @batchcount = params[:batchcount]
-#  @batchcount = @request_payload["batchcount"]
   batchfilename = @filename
   
   if Integer(@batchcount) > 1
@@ -20,10 +18,19 @@ post '/scanimage' do
   end
   
   logger.info "Start scanning, saving to public/scans/#{@filename}"
-  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt &)
+  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
   %x(echo "#{params[:name]}\n#{request.ip}\n#{Time.now}" > public/scans/#{batchfilename}.meta)
   
   status 202
+end
+
+get "/getimage" do
+  MiniMagick::Tool::Convert.new do |convert|
+    convert << params[:file]
+    params[:type] == "text" ? convert.threshold("20%") : ""
+    convert << "public/processed/#{params[:name]}.#{params[:format]}"
+  end
+  return "/processed/#{params[:name]}.#{params[:format]}"
 end
 
 get '/progress' do
@@ -46,11 +53,56 @@ get '/progress' do
 end
 
 get '/scannedfiles' do
-  @files = Dir["./public/scans/*.tiff"].each do |path| path.slice! "./public/" end
-  slim :scannedfiles
+  @files = Array.new
+  Dir["./public/scans/*.tiff"].each_with_index do |path, i|
+    metapath = String.new(path)
+    metapath.slice!(".tiff")
+    thumbpath = String.new(metapath)
+    thumbpath.slice! ".tiff"
+    thumbpath << "_thumb.jpeg"
+    
+    if !File.exists?(thumbpath)
+      puts thumbpath
+      MiniMagick::Tool::Convert.new do |convert|
+        convert << path
+        convert.resize "75x50^"
+        convert << thumbpath
+      end
+    end
+    
+    thumbpath.slice!("./public/")
+    if File.exists?(metapath + ".meta")
+      meta = File.read(metapath + ".meta")
+      path.slice!("./public/")
+      scanned_meta = meta.scan(/(.*)\n/)
+      puts scanned_meta
+      @files[i] = {
+          name: scanned_meta[0][0],
+          ip: scanned_meta[1][0],
+          timestamp: scanned_meta[2][0]
+        }
+    else
+      @files[i] = {
+          name: path.scan(/^\.\/(.+\/)*(.+)\/.(.+)$/)[0][2],
+          ip: "-",
+          timestamp: "-"
+        }
+    end
+    @files[i][:fpath] = path
+    @files[i][:thumbpath] = thumbpath
+      
+  end
+  
+  if request.xhr?
+  # renders :template_partial without layout.html
+    slim :scannedfiles, :layout => false
+  else 
+    # renders as normal inside layout.html
+    slim :scannedfiles
+  end
 end
 
-get '/' do
+get '/scan' do
   slim :scan
 #  @scanner_status = %x(scanimage -L)
 end
