@@ -4,6 +4,12 @@ $(function() {
 
 	app.batchcount = 0;
 
+	$("#postsession").click(function() {
+		$.post("/session", {}).success(function(data) {
+			console.dir(data);
+		})
+	});
+
 	$('#scanform').submit(function () {
 		var self = this;
 		$(".spinner").removeClass("dontdisplay");
@@ -38,9 +44,9 @@ $(function() {
 					if (app.batchcount === 0) {
 						clearInterval(interval);
 						$(".spinner").addClass("dontdisplay");
-						$.get("scannedfiles", function(data) {
-							$("#scannedfiles").html(data);
-						});
+						//$.get("scannedfiles", function(data) {
+						//	$("#scannedfiles").html(data);
+						//});
 						//setTimeout(function() {
 						//	window.location.pathname = "/scannedfiles"
 						//}, 500)
@@ -48,6 +54,6 @@ $(function() {
 
 				}
 			});
-		}, 500);
+		}, 800);
 	};
 });

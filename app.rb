@@ -3,13 +3,18 @@ require 'sinatra'
 require 'json'
 require 'slim'
 require 'mini_magick'
+require 'csv'
+
+require './scannedfiles'
+enable :sessions
 
 set :bind, '0.0.0.0'
 
 post '/scanimage' do
   logger.info "Incoming: #{params}"
   
-  @filename = generate_filename params[:name]
+  @salt = generate_secret(4)
+  @filename = @salt + params[:name]
   @batchcount = params[:batchcount]
   batchfilename = @filename
   
@@ -17,20 +22,18 @@ post '/scanimage' do
     batchfilename = "#{@filename}%d"
   end
   
-  logger.info "Start scanning, saving to public/scans/#{@filename}"
   @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
-  %x(echo "#{params[:name]}\n#{request.ip}\n#{Time.now}" > public/scans/#{batchfilename}.meta)
+  
+  if request.cookies.has_key? "sessionid"
+    if File.exists?("sessions/#{request.cookies["sessionid"]}_scans.csv")
+#      @no_of_docs = %x{wc -l sessions/#{request.cookies["sessionid"]}_scans.csv}.split.first
+    end
+    @scans = CSV.open("sessions/#{request.cookies["sessionid"]}_scans.csv", "ab") do |csv|
+      csv << [params[:name], @batchcount, request.ip, Time.now, request.cookies["sessionid"], @salt]
+    end
+  end
   
   status 202
-end
-
-get "/getimage" do
-  MiniMagick::Tool::Convert.new do |convert|
-    convert << params[:file]
-    params[:type] == "text" ? convert.threshold("20%") : ""
-    convert << "public/processed/#{params[:name]}.#{params[:format]}"
-  end
-  return "/processed/#{params[:name]}.#{params[:format]}"
 end
 
 get '/progress' do
@@ -42,7 +45,6 @@ get '/progress' do
   @output = File.read('progress.txt').gsub /\r/, "\n"
   @lastupdate = @output.scan(/.*Progress: \d+.\d+%\n/).last
   @return[:progress] = @lastupdate.to_s.match(/\d+.\d+/).to_s.to_f
-  @return[:scanner_status] = @output.to_s.match(/\d(?=\))/).to_s
   
   @matched = @output.match /.*(Progress: \d+.\d+%\n)+/
   @output.gsub! /.*(Progress: \d+.\d+%\n)+/, "<strong>#{@lastupdate.to_s}</strong>"
@@ -52,62 +54,69 @@ get '/progress' do
   return @return.to_json
 end
 
-get '/scannedfiles' do
-  @files = Array.new
-  Dir["./public/scans/*.tiff"].each_with_index do |path, i|
-    metapath = String.new(path)
-    metapath.slice!(".tiff")
-    thumbpath = String.new(metapath)
-    thumbpath.slice! ".tiff"
-    thumbpath << "_thumb.jpeg"
-    
-    if !File.exists?(thumbpath)
-      puts thumbpath
-      MiniMagick::Tool::Convert.new do |convert|
-        convert << path
-        convert.resize "75x50^"
-        convert << thumbpath
-      end
-    end
-    
-    thumbpath.slice!("./public/")
-    if File.exists?(metapath + ".meta")
-      meta = File.read(metapath + ".meta")
-      path.slice!("./public/")
-      scanned_meta = meta.scan(/(.*)\n/)
-      puts scanned_meta
-      @files[i] = {
-          name: scanned_meta[0][0],
-          ip: scanned_meta[1][0],
-          timestamp: scanned_meta[2][0]
-        }
-    else
-      @files[i] = {
-          name: path.scan(/^\.\/(.+\/)*(.+)\/.(.+)$/)[0][2],
-          ip: "-",
-          timestamp: "-"
-        }
-    end
-    @files[i][:fpath] = path
-    @files[i][:thumbpath] = thumbpath
-      
-  end
-  
-  if request.xhr?
-  # renders :template_partial without layout.html
-    slim :scannedfiles, :layout => false
-  else 
-    # renders as normal inside layout.html
-    slim :scannedfiles
-  end
-end
-
 get '/scan' do
+  if !(request.cookies.has_key? "sessionid")
+    response.set_cookie('sessionid', value: generate_secret(12))
+  end
   slim :scan
 #  @scanner_status = %x(scanimage -L)
 end
 
-def generate_filename(passed_name)
-  time = Time.now
-  return "#{time.year}-#{time.month}-#{time.day}_#{time.hour}.#{time.min}.#{time.sec}_#{passed_name}"
+get '/preview' do
+  @files = Array.new
+  if File.exists? "sessions/#{request.cookies["sessionid"]}_scans.csv"
+    CSV.foreach("sessions/#{request.cookies["sessionid"]}_scans.csv") do |row|
+      # row [0] name
+      # row [1] Batchcount
+      # row [2] IP
+      # row [3] Datum
+      # row [4] Session ID
+      # row [5] Salt
+      url = "scans/#{row[5]}#{row[0]}.tiff";
+      thumb_url = "thumbs/#{row[4]}_#{row[5]}#{row[0]}_thumb.jpeg";
+
+      @files.push({
+        name: row[0],
+        ip: row[2],
+        date: row[3],
+        thumb_url: thumb_url,
+        url: url
+        })
+    end
+
+    @files.each do |f|
+      if !File.exists?("public/#{f[:thumb_url]}")
+        MiniMagick::Tool::Convert.new do |convert|
+          convert << "public/#{f[:url]}"
+          convert.resize "150x100^"
+          convert << "public/#{f[:thumb_url]}"
+        end
+      end
+    end
+  end
+  
+  if request.xhr?
+    slim :preview, :layout => false 
+  else 
+    slim :preview
+  end
+end
+
+post 'process' do
+  @proc_url = "public/processed/#{params[:sessionid]}_#{params[:salt]}#{params[:name]}.#{params[:type]}"
+  MiniMagick::Tool::Convert.new do |convert|
+    convert << params[:url]
+    convert.resize "750x500"
+    params[:type] == "pdf" ? convert.threshold("#{params[:threshold]}%") : ""
+    convert << @proc_url
+  end
+
+  return @proc_url
+end
+
+helpers do
+  def generate_secret(n)
+    pool = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
+    pool.shuffle[0,n].join
+  end
 end
