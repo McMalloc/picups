@@ -1,0 +1,36 @@
+div.grid
+  h1.half.unit Gescannte Dateien
+  div.half.unit
+    a href="scan"
+      i.fa.fa-arrow-left
+      span &ensp;Zurück zum Scandialog
+  div.whole.unit
+    table
+      thead
+        th Vorschau
+        th Datei
+        th Computer
+        th Datum
+        th
+      tbody
+      - @files.each_with_index do |f, i|
+        tr data-file="#{f[:fpath]}"
+          td
+            img src="#{f[:thumbpath]}" alt="Vorschau"
+          td
+            div = f[:name]
+            a.td-on-hover data-idx="#{i}" href="#{f[:fpath]}" Download Rohdatei
+          td =f[:ip]
+          td
+            div.table-date =f[:timestamp]
+            div.td-on-hover =f[:timestamp]
+          td
+            button.dl-pdf data-idx="#{i}"
+              i.fa.fa-download
+              span &ensp;PDF
+            br
+            button.dl-jpeg data-idx="#{i}"
+              i.fa.fa-download
+              span &ensp;JPEG
+
+script type="application/javascript" src="process.js"

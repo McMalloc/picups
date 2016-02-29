@@ -1,0 +1,23 @@
+div.grid
+  h1.half.unit Gescannte Dateien
+  div.half.unit
+    a href="scan"
+      i.fa.fa-arrow-left
+      span &ensp;Zurück zum Scandialog
+div.grid  
+    - @files.each_with_index do |f, i|
+      div.one-fifth.unit
+        img alt="Thumbnails" src="#{f[:thumb_url]}"
+        div
+          button.dl-pdf data-idx="#{i}"
+            i.fa.fa-download
+            br
+            span &ensp;PDF
+          button.dl-jpeg data-idx="#{i}"
+            i.fa.fa-download
+            br
+            span &ensp;JPEG
+
+script type="application/javascript" src="process.js"
+
+/script type="application/javascript" src="process.js"
