@@ -6,17 +6,34 @@ div.grid
       span &ensp;Zurück zum Scandialog
 div.grid  
     - @files.each_with_index do |f, i|
-      div.one-fifth.unit
-        img alt="Thumbnails" src="#{f[:thumb_url]}"
+
+      i.fa.fa-reply.re-btn.dontdisplay data-idx="#{i}"
+      div.one-third.unit.preview-tile id="tile-#{i}"
         div
-          button.dl-pdf data-idx="#{i}"
-            i.fa.fa-download
-            br
-            span &ensp;PDF
-          button.dl-jpeg data-idx="#{i}"
-            i.fa.fa-download
-            br
-            span &ensp;JPEG
+          span.doc-name contenteditable="true" data-idx="#{i}" =f[:name]
+          i.fa.fa-times.close-btn data-idx="#{i}"
+
+        div.preview-image id="preview-#{i}"
+          img alt="Thumbnails" src="#{f[:thumb_url]}"
+
+        form.proc-form data-idx="#{i}" data-url="#{f[:url]}"
+          input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb_url]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
+          label for="thresholded-check-#{i}" data-tooltip="Papiergraue Flächen werden weiß abgebildet und Text hervorgehoben."
+            span &ensp;
+            i.fa.fa-adjust
+            span &ensp;Gespreiztes Schwarzweiß
+
+          div
+            input id="jpeg-check-#{i}" type="radio" name="format-#{i}" value="jpeg"
+              label for="jpeg-check-#{i}" &ensp;.jpg
+            span &emsp; &emsp;
+            input id="pdf-check-#{i}" type="radio" name="format-#{i}" value="pdf"
+              label for="pdf-check-#{i}" &ensp;.pdf
+            span &emsp; &emsp;
+            input id="tiff-check-#{i}" type="radio" name="format-#{i}" value="tiff"
+              label data-tooltip="Als verlustfreies TIFF herunterladen (sehr groß, für weitere Bildbearbeitungen nützlich)" for="tiff-check-#{i}" &ensp;.tiff
+
+    button#dl-btn.whole.unit Download
 
 script type="application/javascript" src="process.js"
 

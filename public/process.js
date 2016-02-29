@@ -1,11 +1,56 @@
 var app = app || {};
 
 $(function() {
-	$(".dl-pdf").click(function() {
-		app.requestfile(this.dataset.idx, "pdf", "text");
+	app.reqPayload = [];
+
+	$("#dl-btn").click(function() {
+		$(".proc-form").each(function() {
+			var idx = this.dataset.idx;
+			var format = $("[name='format-"+idx+"']:checked").val();
+			app.reqPayload.push({
+				thresholded: $("[name='thresholded-"+idx+"']").is(":checked"),
+				format: format === undefined ? "jpeg" : format,
+				name: $(".doc-name[data-idx='"+idx+"']").text(),
+				url: this.dataset.url
+			});
+		});
+
+		$.ajax({
+			url: "/getimages",
+			//contentType: "application/json",
+			type: "post",
+			data: JSON.stringify(app.reqPayload)
+		}).done(function(res) {
+			window.location = res;
+		});
 	});
-	$(".dl-jpeg").click(function() {
-		app.requestfile(this.dataset.idx, "jpeg", "color");
+
+
+	$(".close-btn").click(function() {
+		$("#tile-" + this.dataset.idx).addClass("hide");
+		$(".re-btn[data-idx='"+this.dataset.idx+"']").removeClass("dontdisplay");
+	});
+	$(".re-btn").click(function() {
+		$("#tile-" + this.dataset.idx).removeClass("hide");
+		$(this).addClass("dontdisplay");
+	});
+
+	$(".bw-check").click(function() {
+		var $this = $(this);
+
+		var imgCont = $("#"+$this.attr("data-preview"));
+		imgCont.addClass("loading");
+
+		$.post("/switch_thumb", {
+			url: this.parentElement.dataset.url,
+			thumb_url: this.dataset.thumbtarget,
+			thresholded: function() {
+				return $this.is(':checked');
+			}()
+		}, function(res) {
+			imgCont.find("img").attr("src", res + "?" + new Date().getTime());
+			imgCont.removeClass("loading");
+		})
 	});
 
 	$(".table-date").each(function() {

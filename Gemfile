@@ -1,4 +1,4 @@
-gem sinatra
-gem slim
-gem whenever
-gem mini_magick
+source "http://rubygems.org"
+gem "sinatra"
+gem "slim"
+gem "mini_magick"

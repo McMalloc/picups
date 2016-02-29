@@ -1,0 +1,19 @@
+.preview-image {
+    position: relative;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQANbt279z4gsBhLw9vZmhAvCBECKwILIAmBBdAGQIADA5RMkRFabrgAAAABJRU5ErkJggg==) repeat;
+
+    &:after {
+          content: '\A';
+          position: absolute;
+          width: 100%; height:100%;
+          top:0; left:0;
+          background:rgba(255,255,255,0.6);
+          opacity: 0;
+          transition: all 0.2s;
+          -webkit-transition: all 0.2s;
+     }
+}
+
+.loading:after {
+   opacity: 1;
+}

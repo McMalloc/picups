@@ -1,4 +1,6 @@
 @import "vars.scss";
+@import "tooltip.scss";
+@import "images.scss";
 
 h1, h2, h3 {
   color: deeppink;
@@ -11,6 +13,10 @@ h1, h2, h3 {
 .spinner {
   width: 100%;
   text-align: center;
+}
+
+.hide {
+  visibility: hidden;
 }
 
 .dontdisplay {
@@ -51,54 +57,22 @@ pre {
   /*box-shadow: inset 2px 2px 7px #eee;*/
 }
 
-table {
-  border-collapse: collapse;
-  border: 0;
-  width: 100%;
+.close-btn {
+  float: right;
+  visibility: hidden;
+  cursor: pointer;
+}
 
-  button {
-    width: 100%;
-    margin-bottom: 12px;
-    visibility: hidden;
-    height: 50%;
-  }
+.re-button {
+  display: inline;
+}
 
-  .td-on-hover {
-    color: #ddd;
-  }
+.doc-name {
+  min-width: 100px;
+}
 
-  thead tr {
-    &:hover {
-      background-color: white;
-    }
-  }
-
-  th {
-    text-align: left;
-  }
-
-  td {
-    padding: 5px 8px 3px 0;
-    vertical-align: top;
-  }
-
-  tr {
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: #F2E9E1;
-
-      .td-on-hover {
-        color: black;
-      }
-
-      button {
-        visibility: visible;
-      }
-    }
-  }
+.preview-tile:hover .close-btn {
+  visibility: visible;
 }
 
 /*tr:nth-child(even) {*/

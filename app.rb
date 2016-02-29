@@ -16,7 +16,7 @@ post '/scanimage' do
   @salt = generate_secret(4)
   @filename = @salt + params[:name]
   @batchcount = params[:batchcount]
-  batchfilename = @filename
+  batchfilename = request.cookies["sessionid"] + "_" + @filename
   
   if Integer(@batchcount) > 1
     batchfilename = "#{@filename}%d"
@@ -73,7 +73,7 @@ get '/preview' do
       # row [4] Session ID
       # row [5] Salt
       url = "scans/#{row[5]}#{row[0]}.tiff";
-      thumb_url = "thumbs/#{row[4]}_#{row[5]}#{row[0]}_thumb.jpeg";
+      thumb_url = get_thumb_url(row[0], row[4], row[5]);
 
       @files.push({
         name: row[0],
@@ -86,11 +86,7 @@ get '/preview' do
 
     @files.each do |f|
       if !File.exists?("public/#{f[:thumb_url]}")
-        MiniMagick::Tool::Convert.new do |convert|
-          convert << "public/#{f[:url]}"
-          convert.resize "150x100^"
-          convert << "public/#{f[:thumb_url]}"
-        end
+		generate_thumb(f[:url], f[:thumb_url], false)
       end
     end
   end
@@ -102,21 +98,60 @@ get '/preview' do
   end
 end
 
-post 'process' do
-  @proc_url = "public/processed/#{params[:sessionid]}_#{params[:salt]}#{params[:name]}.#{params[:type]}"
-  MiniMagick::Tool::Convert.new do |convert|
-    convert << params[:url]
-    convert.resize "750x500"
-    params[:type] == "pdf" ? convert.threshold("#{params[:threshold]}%") : ""
-    convert << @proc_url
+post '/getimages' do
+	request.body.rewind
+  @request_payload = JSON.parse request.body.read
+
+  %x(mkdir public/processed/#{request.cookies["sessionid"]})
+  
+  @request_payload.each do |req| 
+    MiniMagick::Tool::Convert.new do |convert|
+      convert << "public/#{req["url"]}"
+      req[:thresholded] ? convert.threshold("20%") : ""
+      convert << "public/processed/#{request.cookies["sessionid"]}/#{req["name"]}.#{req["format"]}"
+    end
   end
 
-  return @proc_url
+  %x(zip Scans_#{request.cookies["sessionid"]} public/processed/#{request.cookies["sessionid"]}/*)
+  return "processed/#{request.cookies['sessionid']}/Scans_#{request.cookies['sessionid']}.zip"
+end
+
+post '/switch_thumb' do
+    puts params
+    generate_thumb(params[:url], params[:thumb_url], params[:thresholded].to_bool)
+    return params[:thumb_url]
 end
 
 helpers do
+	def generate_thumb(url, thumb_url, threshold)
+		MiniMagick::Tool::Convert.new do |convert|
+          convert << "public/#{url}"
+          convert.resize "300x150^"
+          if threshold
+            convert.threshold("20%")
+          end
+          convert << "public/#{thumb_url}"
+        end
+	end
+
+	def get_thumb_url(name, sessionid, salt)
+		return "/thumbs/#{sessionid}_#{salt}#{name}_thumb.jpeg"
+	end
+
+	def get_proc_url(name, sessionid, salt, type)
+		return "/processed/#{sessionid}_#{salt}#{name}_thumb.#{type}"
+	end
+
   def generate_secret(n)
     pool = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
     pool.shuffle[0,n].join
+  end
+end
+
+class String
+  def to_bool
+    return true   if self == true   || self =~ (/(true|t|yes|y|1)$/i)
+    return false  if self == false  || self =~ (/(false|f|no|n|0)$/i)
+    raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
   end
 end
