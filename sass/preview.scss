@@ -7,11 +7,22 @@
 }
 
 .preview-tile {
+  max-width: 300px;
+  margin-right: 24px;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.1);
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.4);
+  }
+
   .proc-form {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQANbt279z4gsBhLw9vZmhAvCBECKwILIAmBBdAGQIADA5RMkRFabrgAAAABJRU5ErkJggg==) repeat;
     padding: 3px;
 
     div.cont {
+      &:first-child {
+        border-bottom: 1px solid lightgrey;
+      }
       padding: 3px;
       margin: 3px;
       background-color: white;
@@ -35,7 +46,7 @@
 
 .preview-image {
   position: relative;
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQANbt279z4gsBhLw9vZmhAvCBECKwILIAmBBdAGQIADA5RMkRFabrgAAAABJRU5ErkJggg==) repeat;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAP0lEQVQYV43M2QkAIAwEUdPK9l/TtqJEUDxyzfdjpBUi2SVzigBICBfSmQtP5MIXmdBCH/TQBSO0YYYmrCCFA3AUJ6QhAeO1AAAAAElFTkSuQmCC) repeat;
 
   &:after {
     content: '\A';
