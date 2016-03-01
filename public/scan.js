@@ -4,14 +4,9 @@ $(function() {
 
 	app.batchcount = 0;
 
-	$("#postsession").click(function() {
-		$.post("/session", {}).success(function(data) {
-			console.dir(data);
-		})
-	});
-
 	$('#scanform').submit(function () {
 		var self = this;
+		$(".status-cont").css("opacity", 1);
 		$(".spinner").removeClass("dontdisplay");
 		if ((self[1].value > 0) && (self[1].value < 100)) {
 			app.batchcount = parseInt(self[1].value);
@@ -44,9 +39,9 @@ $(function() {
 					if (app.batchcount === 0) {
 						clearInterval(interval);
 						$(".spinner").addClass("dontdisplay");
-						//$.get("scannedfiles", function(data) {
-						//	$("#scannedfiles").html(data);
-						//});
+						$.get("preview", function(data) {
+							$("#preview").html(data);
+						});
 						//setTimeout(function() {
 						//	window.location.pathname = "/scannedfiles"
 						//}, 500)

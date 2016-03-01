@@ -42,7 +42,7 @@ $(function() {
 		imgCont.addClass("loading");
 
 		$.post("/switch_thumb", {
-			url: this.parentElement.dataset.url,
+			url: this.parentElement.parentElement.dataset.url,
 			thumb_url: this.dataset.thumbtarget,
 			thresholded: function() {
 				return $this.is(':checked');

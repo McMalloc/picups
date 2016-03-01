@@ -1,9 +1,23 @@
 @import "vars.scss";
 @import "tooltip.scss";
 @import "images.scss";
+@import "elements.scss";
+@import "scan.scss";
+@import "preview.scss";
+
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
 
 h1, h2, h3 {
   color: deeppink;
+}
+
+.pull-right {
+  float: right;
 }
 
 //body {
@@ -11,8 +25,12 @@ h1, h2, h3 {
 //}
 
 .spinner {
-  width: 100%;
-  text-align: center;
+
+}
+
+body {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .hide {
@@ -57,23 +75,7 @@ pre {
   /*box-shadow: inset 2px 2px 7px #eee;*/
 }
 
-.close-btn {
-  float: right;
-  visibility: hidden;
-  cursor: pointer;
-}
 
-.re-button {
-  display: inline;
-}
-
-.doc-name {
-  min-width: 100px;
-}
-
-.preview-tile:hover .close-btn {
-  visibility: visible;
-}
 
 /*tr:nth-child(even) {*/
 /*background-color: #F2E9E1;*/

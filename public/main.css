@@ -70,12 +70,88 @@
   opacity: 1;
 }
 
-/* line 1, ../sass/images.scss */
+/* line 1, ../sass/elements.scss */
+select, input[type="text"], span[contenteditable="true"] {
+  padding-bottom: 4px;
+  margin-top: 8px;
+  padding-left: 4px;
+  color: deeppink;
+}
+
+/* line 8, ../sass/elements.scss */
+input[type="text"], span[contenteditable="true"] {
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  font-size: 18px;
+  font-family: serif;
+  transition: border-color 0.4s;
+}
+/* line 15, ../sass/elements.scss */
+input[type="text"]:focus, span[contenteditable="true"]:focus {
+  outline: none;
+  border-bottom: 2px solid deeppink;
+  padding-bottom: 3px;
+}
+
+/* line 22, ../sass/elements.scss */
+.form-submit {
+  text-align: right;
+}
+/* line 25, ../sass/elements.scss */
+.form-submit button {
+  padding: 8px 24px;
+}
+
+/* line 1, ../sass/scan.scss */
+.status-cont {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* line 1, ../sass/preview.scss */
+.tile-header {
+  margin-bottom: 12px;
+}
+/* line 4, ../sass/preview.scss */
+.tile-header span[contenteditable="true"] {
+  padding-right: 24px;
+}
+
+/* line 10, ../sass/preview.scss */
+.preview-tile .proc-form {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQANbt279z4gsBhLw9vZmhAvCBECKwILIAmBBdAGQIADA5RMkRFabrgAAAABJRU5ErkJggg==) repeat;
+  padding: 3px;
+}
+/* line 14, ../sass/preview.scss */
+.preview-tile .proc-form div.cont {
+  padding: 3px;
+  margin: 3px;
+  background-color: white;
+}
+
+/* line 22, ../sass/preview.scss */
+.close-btn {
+  float: right;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+/* line 28, ../sass/preview.scss */
+.re-button {
+  display: inline;
+}
+
+/* line 32, ../sass/preview.scss */
+.preview-tile:hover .close-btn {
+  visibility: visible;
+}
+
+/* line 36, ../sass/preview.scss */
 .preview-image {
   position: relative;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAKElEQVQIW2NkQANbt279z4gsBhLw9vZmhAvCBECKwILIAmBBdAGQIADA5RMkRFabrgAAAABJRU5ErkJggg==) repeat;
 }
-/* line 5, ../sass/images.scss */
+/* line 40, ../sass/preview.scss */
 .preview-image:after {
   content: '\A';
   position: absolute;
@@ -89,47 +165,62 @@
   -webkit-transition: all 0.2s;
 }
 
-/* line 17, ../sass/images.scss */
+/* line 52, ../sass/preview.scss */
 .loading:after {
   opacity: 1;
 }
 
-/* line 5, ../sass/main.scss */
+/* line 8, ../sass/main.scss */
+html {
+  box-sizing: border-box;
+}
+
+/* line 11, ../sass/main.scss */
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* line 15, ../sass/main.scss */
 h1, h2, h3 {
   color: deeppink;
 }
 
-/* line 13, ../sass/main.scss */
-.spinner {
-  width: 100%;
-  text-align: center;
+/* line 19, ../sass/main.scss */
+.pull-right {
+  float: right;
 }
 
-/* line 18, ../sass/main.scss */
+/* line 31, ../sass/main.scss */
+body {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+/* line 36, ../sass/main.scss */
 .hide {
   visibility: hidden;
 }
 
-/* line 22, ../sass/main.scss */
+/* line 40, ../sass/main.scss */
 .dontdisplay {
   display: none;
 }
 
-/* line 26, ../sass/main.scss */
+/* line 44, ../sass/main.scss */
 a {
   text-decoration: none;
   color: deeppink;
 }
-/* line 30, ../sass/main.scss */
+/* line 48, ../sass/main.scss */
 a:hover {
   border-bottom: 1px solid deeppink;
 }
-/* line 34, ../sass/main.scss */
+/* line 52, ../sass/main.scss */
 a:visited {
   color: darkgray;
 }
 
-/* line 39, ../sass/main.scss */
+/* line 57, ../sass/main.scss */
 #progress-bar {
   width: 0%;
   height: 10px;
@@ -138,41 +229,19 @@ a:visited {
   transition: width 0.2s;
 }
 
-/* line 47, ../sass/main.scss */
+/* line 65, ../sass/main.scss */
 #progress-bar-ref {
   width: 100%;
   border-top: 1px solid #9C9C9C;
 }
 
-/* line 52, ../sass/main.scss */
+/* line 70, ../sass/main.scss */
 pre {
   word-break: break-all;
   background-color: #f3f3f3;
   padding: 8px;
   font-size: 12px;
   /*box-shadow: inset 2px 2px 7px #eee;*/
-}
-
-/* line 60, ../sass/main.scss */
-.close-btn {
-  float: right;
-  visibility: hidden;
-  cursor: pointer;
-}
-
-/* line 66, ../sass/main.scss */
-.re-button {
-  display: inline;
-}
-
-/* line 70, ../sass/main.scss */
-.doc-name {
-  min-width: 100px;
-}
-
-/* line 74, ../sass/main.scss */
-.preview-tile:hover .close-btn {
-  visibility: visible;
 }
 
 /*tr:nth-child(even) {*/

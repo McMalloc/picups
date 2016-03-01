@@ -73,27 +73,31 @@ get '/preview' do
       # row [4] Session ID
       # row [5] Salt
       url = "scans/#{row[5]}#{row[0]}.tiff";
-      thumb_url = get_thumb_url(row[0], row[4], row[5]);
-
-      @files.push({
-        name: row[0],
-        ip: row[2],
-        date: row[3],
-        thumb_url: thumb_url,
-        url: url
-        })
+      
+      if File.exists?("public/#{url}")
+        thumb_url = get_thumb_url(row[0], row[4], row[5]);
+        @files.push({
+          name: row[0],
+          ip: row[2],
+          date: row[3],
+          thumb_url: thumb_url,
+          url: url
+          })
+      end
     end
 
     @files.each do |f|
       if !File.exists?("public/#{f[:thumb_url]}")
-		generate_thumb(f[:url], f[:thumb_url], false)
+		      generate_thumb(f[:url], f[:thumb_url], false)
       end
     end
   end
   
   if request.xhr?
+    @show_backlink = false
     slim :preview, :layout => false 
   else 
+    @show_backlink = true
     slim :preview
   end
 end
@@ -101,19 +105,23 @@ end
 post '/getimages' do
 	request.body.rewind
   @request_payload = JSON.parse request.body.read
-
-  %x(mkdir public/processed/#{request.cookies["sessionid"]})
+  sid = request.cookies["sessionid"]
+  scandir = "public/processed/#{sid}"
+  file_n = 0
+  
+  %x(mkdir -p #{scandir})
   
   @request_payload.each do |req| 
+    file_n += 1
     MiniMagick::Tool::Convert.new do |convert|
       convert << "public/#{req["url"]}"
-      req[:thresholded] ? convert.threshold("20%") : ""
-      convert << "public/processed/#{request.cookies["sessionid"]}/#{req["name"]}.#{req["format"]}"
+      req["thresholded"] ? convert.threshold("20%") : ""
+      convert << "public/processed/#{sid}/#{req["name"]}.#{req["format"]}"
     end
   end
 
-  %x(zip Scans_#{request.cookies["sessionid"]} public/processed/#{request.cookies["sessionid"]}/*)
-  return "processed/#{request.cookies['sessionid']}/Scans_#{request.cookies['sessionid']}.zip"
+  %x(zip -j #{scandir}/Scans_#{sid} #{scandir}/*)
+  return "processed/#{sid}/Scans_#{sid}.zip"
 end
 
 post '/switch_thumb' do

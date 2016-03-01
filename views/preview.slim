@@ -1,15 +1,16 @@
 div.grid
   h1.half.unit Gescannte Dateien
-  div.half.unit
-    a href="scan"
-      i.fa.fa-arrow-left
-      span &ensp;Zurück zum Scandialog
+  - if @show_backlink
+    div.half.unit
+      a href="scan"
+        i.fa.fa-arrow-left
+        span &ensp;Zurück zum Scandialog
 div.grid  
     - @files.each_with_index do |f, i|
 
       i.fa.fa-reply.re-btn.dontdisplay data-idx="#{i}"
       div.one-third.unit.preview-tile id="tile-#{i}"
-        div
+        div.tile-header
           span.doc-name contenteditable="true" data-idx="#{i}" =f[:name]
           i.fa.fa-times.close-btn data-idx="#{i}"
 
@@ -17,23 +18,26 @@ div.grid
           img alt="Thumbnails" src="#{f[:thumb_url]}"
 
         form.proc-form data-idx="#{i}" data-url="#{f[:url]}"
-          input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb_url]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
-          label for="thresholded-check-#{i}" data-tooltip="Papiergraue Flächen werden weiß abgebildet und Text hervorgehoben."
-            span &ensp;
-            i.fa.fa-adjust
-            span &ensp;Gespreiztes Schwarzweiß
+          div.cont
+            input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb_url]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
+            label for="thresholded-check-#{i}" data-tooltip="Papiergraue Flächen werden weiß abgebildet und Text hervorgehoben."
+              span &ensp;
+              i.fa.fa-adjust.pull-right
+              span &ensp;Gespreiztes Schwarzweiß
 
-          div
+          div.cont
+            i.fa.fa-file-image-o.pull-right
             input id="jpeg-check-#{i}" type="radio" name="format-#{i}" value="jpeg"
-              label for="jpeg-check-#{i}" &ensp;.jpg
+              label for="jpeg-check-#{i}" &ensp;&ensp;.jpg
             span &emsp; &emsp;
             input id="pdf-check-#{i}" type="radio" name="format-#{i}" value="pdf"
-              label for="pdf-check-#{i}" &ensp;.pdf
+              label for="pdf-check-#{i}" &ensp;&ensp;.pdf
             span &emsp; &emsp;
             input id="tiff-check-#{i}" type="radio" name="format-#{i}" value="tiff"
-              label data-tooltip="Als verlustfreies TIFF herunterladen (sehr groß, für weitere Bildbearbeitungen nützlich)" for="tiff-check-#{i}" &ensp;.tiff
+              label data-tooltip="Als verlustfreies TIFF herunterladen (sehr groß, für weitere Bildbearbeitungen nützlich)" for="tiff-check-#{i}" &ensp;&ensp;.tiff
 
-    button#dl-btn.whole.unit Download
+    div.whole.unit.form-submit
+      button#dl-btn Download
 
 script type="application/javascript" src="process.js"
 
