@@ -4,6 +4,17 @@ $(function() {
 
 	app.batchcount = 0;
 
+	$('.mod-nr').click(function(event) {
+		var $e = $("[name='batchcount']");
+		var method = event.target.parentElement.dataset.mod;
+		var oldvar = parseInt($e.attr("value"));
+		if (method === "inc") {
+			$e.attr("value", oldvar +1);
+		} else if (method === "dec" && oldvar > 1) {
+			$e.attr("value", oldvar -1);
+		}
+	});
+
 	$('#scanform').submit(function () {
 		var self = this;
 		$(".status-cont").css("opacity", 1);
@@ -21,6 +32,7 @@ $(function() {
 
 		app.queryProgress("progress");
 
+		// cancel native request processing
 		return false;
 	});
 

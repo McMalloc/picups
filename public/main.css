@@ -94,10 +94,60 @@ input[type="text"]:focus, span[contenteditable="true"]:focus {
 }
 
 /* line 22, ../sass/elements.scss */
+input[type="checkbox"] {
+  display: none;
+}
+/* line 26, ../sass/elements.scss */
+input[type="checkbox"] + label:before {
+  font-family: FontAwesome;
+  content: "\f096\2002";
+}
+/* line 33, ../sass/elements.scss */
+input[type="checkbox"]:checked + label:before {
+  color: deeppink;
+  font-family: FontAwesome;
+  content: "\f046\2002";
+}
+
+/* line 41, ../sass/elements.scss */
+input[type="radio"] {
+  display: none;
+}
+/* line 44, ../sass/elements.scss */
+input[type="radio"]:checked + label {
+  background-color: deeppink;
+  color: white;
+}
+/* line 48, ../sass/elements.scss */
+input[type="radio"]:checked + label:after {
+  content: "";
+}
+/* line 52, ../sass/elements.scss */
+input[type="radio"]:checked + label:hover {
+  color: white;
+}
+/* line 57, ../sass/elements.scss */
+input[type="radio"] + label {
+  transition: color 0.2s;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  padding: 1px 3px 3px 3px;
+  border-radius: 2px;
+}
+/* line 64, ../sass/elements.scss */
+input[type="radio"] + label:after {
+  content: "?";
+}
+/* line 68, ../sass/elements.scss */
+input[type="radio"] + label:hover {
+  color: deeppink;
+}
+
+/* line 74, ../sass/elements.scss */
 .form-submit {
   text-align: right;
 }
-/* line 25, ../sass/elements.scss */
+/* line 77, ../sass/elements.scss */
 .form-submit button {
   padding: 8px 24px;
 }
@@ -106,6 +156,25 @@ input[type="text"]:focus, span[contenteditable="true"]:focus {
 .status-cont {
   opacity: 0;
   transition: opacity 0.5s;
+}
+
+/* line 6, ../sass/scan.scss */
+.numberbtn {
+  float: right;
+  margin-top: 4px;
+}
+
+/* line 11, ../sass/scan.scss */
+.mod-nr {
+  cursor: pointer;
+}
+/* line 14, ../sass/scan.scss */
+.mod-nr:hover {
+  color: deeppink;
+}
+/* line 18, ../sass/scan.scss */
+.mod-nr:active {
+  color: #4AA02C;
 }
 
 /* line 1, ../sass/preview.scss */
@@ -118,54 +187,83 @@ input[type="text"]:focus, span[contenteditable="true"]:focus {
 }
 
 /* line 9, ../sass/preview.scss */
+.doc-name {
+  display: inline-block;
+  width: 60%;
+}
+
+/* line 14, ../sass/preview.scss */
 .preview-tile {
   max-width: 300px;
   margin-right: 24px;
+  margin-bottom: 28px;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.2s;
+  position: relative;
 }
-/* line 15, ../sass/preview.scss */
+/* line 22, ../sass/preview.scss */
 .preview-tile:hover {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
 }
-/* line 19, ../sass/preview.scss */
+/* line 26, ../sass/preview.scss */
 .preview-tile .proc-form {
   padding: 3px;
 }
-/* line 22, ../sass/preview.scss */
+/* line 29, ../sass/preview.scss */
 .preview-tile .proc-form div.cont {
   padding: 3px;
   margin: 3px;
   background-color: white;
 }
-/* line 23, ../sass/preview.scss */
+/* line 30, ../sass/preview.scss */
 .preview-tile .proc-form div.cont:first-child {
   border-bottom: 1px solid lightgrey;
 }
 
-/* line 33, ../sass/preview.scss */
+/* line 40, ../sass/preview.scss */
+.ignored {
+  position: relative;
+  color: black;
+  text-align: center;
+  padding-top: 20%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 0.95;
+  z-index: 100;
+}
+/* line 55, ../sass/preview.scss */
+.ignored:hover {
+  color: deeppink;
+}
+
+/* line 60, ../sass/preview.scss */
 .close-btn {
   float: right;
   visibility: hidden;
   cursor: pointer;
 }
 
-/* line 39, ../sass/preview.scss */
+/* line 66, ../sass/preview.scss */
 .re-button {
   display: inline;
 }
 
-/* line 43, ../sass/preview.scss */
+/* line 70, ../sass/preview.scss */
 .preview-tile:hover .close-btn {
   visibility: visible;
 }
 
-/* line 47, ../sass/preview.scss */
+/* line 74, ../sass/preview.scss */
 .preview-image {
   position: relative;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAP0lEQVQYV43M2QkAIAwEUdPK9l/TtqJEUDxyzfdjpBUi2SVzigBICBfSmQtP5MIXmdBCH/TQBSO0YYYmrCCFA3AUJ6QhAeO1AAAAAElFTkSuQmCC) repeat;
 }
-/* line 51, ../sass/preview.scss */
+/* line 78, ../sass/preview.scss */
 .preview-image:after {
   content: '\A';
   position: absolute;
@@ -179,7 +277,7 @@ input[type="text"]:focus, span[contenteditable="true"]:focus {
   -webkit-transition: all 0.2s;
 }
 
-/* line 63, ../sass/preview.scss */
+/* line 90, ../sass/preview.scss */
 .loading:after {
   opacity: 1;
 }
@@ -187,54 +285,63 @@ input[type="text"]:focus, span[contenteditable="true"]:focus {
 /* line 8, ../sass/main.scss */
 html {
   box-sizing: border-box;
+  height: 100%;
 }
 
-/* line 11, ../sass/main.scss */
+/* line 13, ../sass/main.scss */
+#yield {
+  min-height: 100%;
+  position: relative;
+}
+
+/* line 18, ../sass/main.scss */
+body {
+  height: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  font-family: "Segoe UI", "Helvetica", "Ubuntu Light", "Droid Sans", sans-serif;
+}
+
+/* line 25, ../sass/main.scss */
 *, *:before, *:after {
   box-sizing: inherit;
 }
 
-/* line 15, ../sass/main.scss */
+/* line 29, ../sass/main.scss */
 h1, h2, h3 {
   color: deeppink;
 }
 
-/* line 19, ../sass/main.scss */
+/* line 33, ../sass/main.scss */
 .pull-right {
   float: right;
 }
 
-/* line 31, ../sass/main.scss */
-body {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-/* line 36, ../sass/main.scss */
+/* line 37, ../sass/main.scss */
 .hide {
   visibility: hidden;
 }
 
-/* line 40, ../sass/main.scss */
+/* line 41, ../sass/main.scss */
 .dontdisplay {
   display: none;
 }
 
-/* line 44, ../sass/main.scss */
+/* line 45, ../sass/main.scss */
 a {
   text-decoration: none;
   color: deeppink;
 }
-/* line 48, ../sass/main.scss */
+/* line 49, ../sass/main.scss */
 a:hover {
   border-bottom: 1px solid deeppink;
 }
-/* line 52, ../sass/main.scss */
+/* line 53, ../sass/main.scss */
 a:visited {
   color: darkgray;
 }
 
-/* line 57, ../sass/main.scss */
+/* line 58, ../sass/main.scss */
 #progress-bar {
   width: 0%;
   height: 10px;
@@ -243,19 +350,33 @@ a:visited {
   transition: width 0.2s;
 }
 
-/* line 65, ../sass/main.scss */
+/* line 66, ../sass/main.scss */
 #progress-bar-ref {
   width: 100%;
   border-top: 1px solid #9C9C9C;
 }
 
-/* line 70, ../sass/main.scss */
+/* line 71, ../sass/main.scss */
 pre {
   word-break: break-all;
   background-color: #f3f3f3;
   padding: 8px;
   font-size: 12px;
   /*box-shadow: inset 2px 2px 7px #eee;*/
+}
+
+/* line 79, ../sass/main.scss */
+footer {
+  clear: both;
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  padding-bottom: 4px;
+}
+
+/* line 87, ../sass/main.scss */
+label {
+  margin-bottom: 2px;
 }
 
 /*tr:nth-child(even) {*/

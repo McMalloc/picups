@@ -2,3 +2,20 @@
   opacity: 0;
   transition: opacity 0.5s;
 }
+
+.numberbtn {
+  float: right;
+  margin-top: 4px;
+}
+
+.mod-nr {
+  cursor: pointer;
+
+  &:hover {
+    color: deeppink;
+  }
+
+  &:active {
+    color: #4AA02C;
+  }
+}

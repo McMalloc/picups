@@ -12,4 +12,10 @@ html
     link rel="stylesheet" type="text/css" href="components/fontawesome/css/font-awesome.css"
     link rel="stylesheet" type="text/css" href="main.css"
   body
-    == yield
+    div#yield
+      == yield
+      footer.grid.unit.whole
+        span RPiScan. Scan service for for low power computers and network disabled scanners.
+        br
+        span Running on&nbsp;
+        =settings.info

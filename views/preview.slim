@@ -8,8 +8,11 @@ div.grid
 div.grid  
     - @files.each_with_index do |f, i|
 
-      i.fa.fa-reply.re-btn.dontdisplay data-idx="#{i}"
-      div.one-third.unit.preview-tile id="tile-#{i}"
+      div.one-third.unit.preview-tile id="tile-#{i}" data-idx="#{i}"
+        div.ignored.dontdisplay data-idx="#{i}"
+          |Wird ignoriert.
+          br
+          |Zum Wiederaufnehmen klicken.
         div.tile-header
           span.doc-name contenteditable="true" data-idx="#{i}" =f[:name]
           i.fa.fa-times.close-btn data-idx="#{i}"
@@ -20,21 +23,20 @@ div.grid
         form.proc-form data-idx="#{i}" data-url="#{f[:url]}"
           div.cont
             input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb_url]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
-            label for="thresholded-check-#{i}" data-tooltip="Papiergraue Flächen werden weiß abgebildet und Text hervorgehoben."
-              span &ensp;
-              i.fa.fa-adjust.pull-right
-              span &ensp;Gespreiztes Schwarzweiß
+            label for="thresholded-check-#{i}"
+              / i.fa.fa-adjust.pull-right
+              | Gespreiztes Schwarzweiß
 
           div.cont
-            i.fa.fa-file-image-o.pull-right
+            / i.fa.fa-file-image-o.pull-right
             input id="jpeg-check-#{i}" type="radio" name="format-#{i}" value="jpeg"
-              label for="jpeg-check-#{i}" &ensp;&ensp;.jpg
-            span &emsp; &emsp;
+              label for="jpeg-check-#{i}".jpg
+            span &emsp;
             input id="pdf-check-#{i}" type="radio" name="format-#{i}" value="pdf"
-              label for="pdf-check-#{i}" &ensp;&ensp;.pdf
-            span &emsp; &emsp;
+              label for="pdf-check-#{i}".pdf
+            span &emsp;
             input id="tiff-check-#{i}" type="radio" name="format-#{i}" value="tiff"
-              label data-tooltip="Als verlustfreies TIFF herunterladen (sehr groß, für weitere Bildbearbeitungen nützlich)" for="tiff-check-#{i}" &ensp;&ensp;.tiff
+              label  for="tiff-check-#{i}".tiff
 
     div.whole.unit.form-submit
       button#dl-btn Download

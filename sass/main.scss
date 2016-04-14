@@ -7,7 +7,21 @@
 
 html {
   box-sizing: border-box;
+  height: 100%;
 }
+
+#yield {
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  height: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  font-family: "Segoe UI", "Helvetica", "Ubuntu Light", "Droid Sans", sans-serif;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -18,19 +32,6 @@ h1, h2, h3 {
 
 .pull-right {
   float: right;
-}
-
-//body {
-//  background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAYAAABmBXS+AAAAYElEQVQYV2P89OnTfwYomHF4AUOYth+DkJAQTAhMMyLzurZO+g9TxMfHB5cjThFIN7JpIJNWXd2Eat2DBw9QFKHIQjmMyA5HVwDzCIqb0BXBPEKcInSHo5sG8ggjMQ4HAE6oLWojbxWnAAAAAElFTkSuQmCC) repeat;
-//}
-
-.spinner {
-
-}
-
-body {
-  max-width: 1280px;
-  margin: 0 auto;
 }
 
 .hide {
@@ -75,7 +76,17 @@ pre {
   /*box-shadow: inset 2px 2px 7px #eee;*/
 }
 
+footer {
+  clear: both;
+  position: absolute;
+  bottom: 0;
+  z-index: 10;
+  padding-bottom: 4px;
+}
 
+label {
+  margin-bottom: 2px;
+}
 
 /*tr:nth-child(even) {*/
 /*background-color: #F2E9E1;*/

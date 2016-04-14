@@ -4,32 +4,43 @@ require 'json'
 require 'slim'
 require 'mini_magick'
 require 'csv'
+require './csvfiles'
 
-require './scannedfiles'
+# require './scannedfiles'
 enable :sessions
 
 set :bind, '0.0.0.0'
+
+configure do
+  set :info, %x(hostname)
+  set :lsusb, %x(lsusb)
+end
+
+get '/i' do
+  "#{settings.lsusb}"
+end
 
 post '/scanimage' do
   logger.info "Incoming: #{params}"
   
   @salt = generate_secret(4)
+  @secret = request.cookies["sessionid"]
   @filename = @salt + params[:name]
   @batchcount = params[:batchcount]
-  batchfilename = request.cookies["sessionid"] + "_" + @filename
+  @batchfilename = @filename
   
   if Integer(@batchcount) > 1
     batchfilename = "#{@filename}%d"
   end
   
-  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
+  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{@secret}/#{@batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
   
   if request.cookies.has_key? "sessionid"
     if File.exists?("sessions/#{request.cookies["sessionid"]}_scans.csv")
 #      @no_of_docs = %x{wc -l sessions/#{request.cookies["sessionid"]}_scans.csv}.split.first
     end
     @scans = CSV.open("sessions/#{request.cookies["sessionid"]}_scans.csv", "ab") do |csv|
-      csv << [params[:name], @batchcount, request.ip, Time.now, request.cookies["sessionid"], @salt]
+      csv << [params[:name], @batchcount, request.ip, Time.now, @secret, @salt]
     end
   end
   
@@ -55,11 +66,26 @@ get '/progress' do
 end
 
 get '/scan' do
+  @secret = generate_secret(12)
   if !(request.cookies.has_key? "sessionid")
-    response.set_cookie('sessionid', value: generate_secret(12))
+    response.set_cookie('sessionid', value: @secret, expires: Time.now + 3600*24*30)
+    %x(mkdir public/scans/#{@secret})
   end
   slim :scan
 #  @scanner_status = %x(scanimage -L)
+end
+
+get '/print' do
+  @printerinfo = %x(lpstat -p)
+  slim :print
+end
+
+post '/print' do
+  File.open('prints/' + params['document'][:filename], "w") do |f|
+    f.write(params['document'][:tempfile].read)
+    %x(lpr prints/#{params['document']})
+  end
+  return "The file was successfully uploaded!"
 end
 
 get '/preview' do
@@ -72,94 +98,62 @@ get '/preview' do
       # row [3] Datum
       # row [4] Session ID
       # row [5] Salt
-      url = "scans/#{row[5]}#{row[0]}.tiff";
-      
-      if File.exists?("public/#{url}")
-        thumb_url = get_thumb_url(row[0], row[4], row[5]);
-        @files.push({
-          name: row[0],
-          ip: row[2],
-          date: row[3],
-          thumb_url: thumb_url,
-          url: url
-          })
-      end
+      url = "scans/#{row[4]}/#{row[5]}#{row[0]}.tiff";
+      thumb_url = "thumbs/#{row[4]}_#{row[5]}#{row[0]}_thumb.jpeg";
+
+      @files.push({
+        name: row[0],
+        ip: row[2],
+        date: row[3],
+        thumb_url: thumb_url,
+        url: url
+        })
     end
 
     @files.each do |f|
-      if !File.exists?("public/#{f[:thumb_url]}")
-		      generate_thumb(f[:url], f[:thumb_url], false)
+      if !File.exists?("public/#{f[:thumb_url]}") && File.exists?("public/#{f[:thumb_url]}")
+        MiniMagick::Tool::Convert.new do |convert|
+          convert << "public/#{f[:url]}"
+          convert.resize "150x100^"
+          convert << "public/#{f[:thumb_url]}"
+        end
       end
     end
   end
   
   if request.xhr?
-    @show_backlink = false
     slim :preview, :layout => false 
   else 
-    @show_backlink = true
     slim :preview
   end
 end
 
-post '/getimages' do
-	request.body.rewind
-  @request_payload = JSON.parse request.body.read
-  sid = request.cookies["sessionid"]
-  scandir = "public/processed/#{sid}"
-  file_n = 0
-  
-  %x(mkdir -p #{scandir})
-  
-  @request_payload.each do |req| 
-    file_n += 1
-    MiniMagick::Tool::Convert.new do |convert|
-      convert << "public/#{req["url"]}"
-      req["thresholded"] ? convert.threshold("20%") : ""
-      convert << "public/processed/#{sid}/#{req["name"]}.#{req["format"]}"
-    end
+post '/process' do
+  @proc_url = "public/processed/#{params[:sessionid]}_#{params[:salt]}#{params[:name]}.#{params[:type]}"
+  MiniMagick::Tool::Convert.new do |convert|
+    convert << params[:url]
+    convert.resize "750x500"
+    params[:type] == "pdf" ? convert.threshold("#{params[:threshold]}%") : ""
+    convert << @proc_url
   end
 
-  %x(zip -j #{scandir}/Scans_#{sid} #{scandir}/*)
-  return "processed/#{sid}/Scans_#{sid}.zip"
+  return @proc_url
 end
 
 post '/switch_thumb' do
-    puts params
-    generate_thumb(params[:url], params[:thumb_url], params[:thresholded].to_bool)
-    return params[:thumb_url]
+  MiniMagick::Tool::Convert.new do |convert|
+    convert << "public/#{params[:url]}"
+    convert.resize "150x100^"
+    params[:thresholded] ? convert.threshold("30%") : ""
+    convert << "public/thumbs/#{params[:thumb_url]}"
+  end
+
+  return @proc_url
 end
 
 helpers do
-	def generate_thumb(url, thumb_url, threshold)
-		MiniMagick::Tool::Convert.new do |convert|
-          convert << "public/#{url}"
-          convert.resize "300x150^"
-          if threshold
-            convert.threshold("20%")
-          end
-          convert << "public/#{thumb_url}"
-        end
-	end
-
-	def get_thumb_url(name, sessionid, salt)
-		return "/thumbs/#{sessionid}_#{salt}#{name}_thumb.jpeg"
-	end
-
-	def get_proc_url(name, sessionid, salt, type)
-		return "/processed/#{sessionid}_#{salt}#{name}_thumb.#{type}"
-	end
-
   def generate_secret(n)
     pool = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
     pool.shuffle[0,n].join
-  end
-end
-
-class String
-  def to_bool
-    return true   if self == true   || self =~ (/(true|t|yes|y|1)$/i)
-    return false  if self == false  || self =~ (/(false|f|no|n|0)$/i)
-    raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
   end
 end

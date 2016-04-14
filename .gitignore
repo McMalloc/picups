@@ -1,3 +1,6 @@
 public/components
 .idea
 .sass-cache
+sessions
+public/scans
+progress.txt

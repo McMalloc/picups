@@ -1,5 +1,5 @@
 div.grid
-  div#scan-form-cont.unit.two-thirds
+  div#scan-form-cont.unit.half
     h1 Scannen
     form#scanform method="post" action="scanimage"
       p
@@ -10,7 +10,14 @@ div.grid
       p
         label for="batchcount-input" Anzahl der Scans
         br
-        input#batchcount-input.whole type="text" name="batchcount"
+        input#batchcount-input.half type="text" name="batchcount" value="1"
+        span.numberbtn
+          span.fa-stack.mod-nr data-mod="dec"
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-minus.fa-stack-1x
+          span.fa-stack.mod-nr data-mod="inc"
+            i.fa.fa-square-o.fa-stack-2x
+            i.fa.fa-plus.fa-stack-1x
         br
       p
         label for="dpi-select" Auflösung
@@ -24,14 +31,14 @@ div.grid
         span.spinner.dontdisplay style="float: left"
           i.fa.fa-cog.fa-spin.fa-2x
           span &emsp;   In Arbeit ...
-        button type="submit" value="submit" id="start-scan-btn" Scannen
+        button type="submit" value="submit" id="start-scan-btn"
+          i.fa.fa-play
+          | &ensp;Scannen
     div.status-cont
       p ... und der Scanner erzählt davon:
       pre#progress noch kein Job angelaufen
       div#progress-bar
       div#progress-bar-ref
-
-div.grid.whole
-  div#preview
+  div#preview.unit.half
 
 script type="application/javascript" src="scan.js"

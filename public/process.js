@@ -27,12 +27,12 @@ $(function() {
 
 
 	$(".close-btn").click(function() {
-		$("#tile-" + this.dataset.idx).addClass("hide");
-		$(".re-btn[data-idx='"+this.dataset.idx+"']").removeClass("dontdisplay");
+		$("#tile-" + this.dataset.idx).attr("data-ignore", "1");
+		$(".ignored[data-idx='"+this.dataset.idx+"']").removeClass("dontdisplay");
 	});
-	$(".re-btn").click(function() {
-		$("#tile-" + this.dataset.idx).removeClass("hide");
-		$(this).addClass("dontdisplay");
+	$(".ignored").click(function() {
+		$("#tile-" + this.dataset.idx).attr("data-ignore", "0");
+		$(".ignored[data-idx='"+this.dataset.idx+"']").addClass("dontdisplay");
 	});
 
 	$(".bw-check").click(function() {

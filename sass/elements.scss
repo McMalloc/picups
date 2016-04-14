@@ -19,6 +19,58 @@ input[type="text"], span[contenteditable="true"] {
   }
 }
 
+input[type="checkbox"] {
+  display: none;
+
+  & + label {
+    &:before {
+      font-family: FontAwesome;
+      content: "\f096\2002";
+    }
+  }
+
+  &:checked + label {
+    &:before {
+      color: deeppink;
+      font-family: FontAwesome;
+      content: "\f046\2002";
+    }
+  }
+}
+
+input[type="radio"] {
+  display: none;
+
+  &:checked + label {
+    background-color: deeppink;
+    color: white;
+
+    &:after {
+      content: "";
+    }
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  & + label {
+    transition: color 0.2s;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    padding: 1px 3px 3px 3px;
+    border-radius: 2px;
+
+    &:after {
+      content: "?";
+    }
+
+    &:hover {
+      color: deeppink;
+    }
+  }
+}
+
 .form-submit {
   text-align: right;
 

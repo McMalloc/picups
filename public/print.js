@@ -1,0 +1,5 @@
+$(function() {
+	$("#printform").submit(function() {
+
+	})
+});
