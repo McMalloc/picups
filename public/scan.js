@@ -3,7 +3,9 @@ var app = app || {};
 $(function() {
 
 	app.batchcount = 0;
-
+	if (window.location.search === "") {
+		window.location.search = "id="+getCookie("sessionid");
+	}
 	$('.mod-nr').click(function(event) {
 		var $e = $("[name='batchcount']");
 		var method = event.target.parentElement.dataset.mod;
@@ -51,7 +53,8 @@ $(function() {
 					if (app.batchcount === 0) {
 						clearInterval(interval);
 						$(".spinner").addClass("dontdisplay");
-						$.get("preview", function(data) {
+						$("#preview").html($("#preview-gen-tmpl").html());
+						$.get("preview" + window.location.search, function(data) {
 							$("#preview").html(data);
 						});
 						//setTimeout(function() {

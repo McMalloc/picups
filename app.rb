@@ -4,7 +4,6 @@ require 'json'
 require 'slim'
 require 'mini_magick'
 require 'csv'
-require './csvfiles'
 
 # require './scannedfiles'
 enable :sessions
@@ -17,7 +16,11 @@ configure do
 end
 
 get '/i' do
-  "#{settings.lsusb}"
+  "#{settings.info}: #{settings.lsusb}"
+end
+
+get "/" do
+  redirect "/scan"
 end
 
 post '/scanimage' do
@@ -33,16 +36,7 @@ post '/scanimage' do
     batchfilename = "#{@filename}%d"
   end
   
-  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{@secret}/#{@batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
-  
-  if request.cookies.has_key? "sessionid"
-    if File.exists?("sessions/#{request.cookies["sessionid"]}_scans.csv")
-#      @no_of_docs = %x{wc -l sessions/#{request.cookies["sessionid"]}_scans.csv}.split.first
-    end
-    @scans = CSV.open("sessions/#{request.cookies["sessionid"]}_scans.csv", "ab") do |csv|
-      csv << [params[:name], @batchcount, request.ip, Time.now, @secret, @salt]
-    end
-  end
+#  @ret = %x(scanimage -l 0mm -t 0mm -x 210mm -y 297mm --resolution #{params[:dpi]} --format=tiff --progress --verbose --batch="public/scans/#{@secret}/#{@batchfilename}.tiff" --batch-count #{@batchcount} 2> progress.txt)
   
   status 202
 end
@@ -89,36 +83,28 @@ post '/print' do
 end
 
 get '/preview' do
-  @files = Array.new
-  if File.exists? "sessions/#{request.cookies["sessionid"]}_scans.csv"
-    CSV.foreach("sessions/#{request.cookies["sessionid"]}_scans.csv") do |row|
-      # row [0] name
-      # row [1] Batchcount
-      # row [2] IP
-      # row [3] Datum
-      # row [4] Session ID
-      # row [5] Salt
-      url = "scans/#{row[4]}/#{row[5]}#{row[0]}.tiff";
-      thumb_url = "thumbs/#{row[4]}_#{row[5]}#{row[0]}_thumb.jpeg";
-
-      @files.push({
-        name: row[0],
-        ip: row[2],
-        date: row[3],
-        thumb_url: thumb_url,
-        url: url
-        })
-    end
-
-    @files.each do |f|
-      if !File.exists?("public/#{f[:thumb_url]}") && File.exists?("public/#{f[:thumb_url]}")
-        MiniMagick::Tool::Convert.new do |convert|
-          convert << "public/#{f[:url]}"
-          convert.resize "150x100^"
-          convert << "public/#{f[:thumb_url]}"
-        end
+  if params[:id]
+    @files = %x(find public/scans/#{params[:id]} -name "*.tiff").split
+    %x(mkdir public/scans/#{params[:id]}/proc)
+  else
+    @files = Array.new
+  end
+  @fpaths = Array.new
+  
+  @files.each do |f|
+    if !File.exists?("#{f}_thumb.jpg") && File.exists?(f)
+      MiniMagick::Tool::Convert.new do |convert|
+        convert << f
+        convert.resize "150x100^"
+        convert << "#{f}_thumb.jpg"
       end
     end
+    
+    @fpaths.push({
+      thumb: f.slice(7..-1) + "_thumb.jpg",
+      name: f.slice(30 .. -1).split(".")[0],
+      source: f
+      })
   end
   
   if request.xhr?
@@ -128,27 +114,35 @@ get '/preview' do
   end
 end
 
-post '/process' do
-  @proc_url = "public/processed/#{params[:sessionid]}_#{params[:salt]}#{params[:name]}.#{params[:type]}"
+post '/switch_thumb' do
+  thumb = params[:thumb]
+  puts params
   MiniMagick::Tool::Convert.new do |convert|
-    convert << params[:url]
-    convert.resize "750x500"
-    params[:type] == "pdf" ? convert.threshold("#{params[:threshold]}%") : ""
-    convert << @proc_url
+    convert << params[:source]
+    convert.resize "150x100^"
+    params[:thresholded] == "true" ? convert.threshold("30%") : ""
+    convert << "public/" + params[:thumb]
   end
 
-  return @proc_url
+  return thumb
 end
 
-post '/switch_thumb' do
-  MiniMagick::Tool::Convert.new do |convert|
-    convert << "public/#{params[:url]}"
-    convert.resize "150x100^"
-    params[:thresholded] ? convert.threshold("30%") : ""
-    convert << "public/thumbs/#{params[:thumb_url]}"
+post "/getimages" do
+  request.body.rewind
+  @files = JSON.parse request.body.read
+  @workdir = @files[0]['url'].slice(0, 25).split(".")[0]
+  @servedir = @workdir.slice(7..-1)
+  @procdir = @workdir + "/proc/"
+  @files.each do |f|
+    MiniMagick::Tool::Convert.new do |convert|
+      convert << f['url']
+      f['thresholded'] ? convert.threshold("30%").compress("zip") : ""
+      convert << "#{@procdir}#{f['name']}.#{f['format']}"
+    end
   end
-
-  return @proc_url
+  %x(zip -rj #{@workdir}/images.zip #{@workdir}/proc)
+  content_type 'text/plain'
+  "#{@servedir}/images.zip"
 end
 
 helpers do
@@ -156,4 +150,8 @@ helpers do
     pool = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
     pool.shuffle[0,n].join
   end
+end
+
+get "/*" do
+  "Sorry, da ist was schief gelaufen."
 end

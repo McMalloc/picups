@@ -35,10 +35,17 @@ div.grid
           i.fa.fa-play
           | &ensp;Scannen
     div.status-cont
-      p ... und der Scanner erzählt davon:
-      pre#progress noch kein Job angelaufen
+      / p ... und der Scanner erzählt davon:
+      / pre#progress noch kein Job angelaufen
       div#progress-bar
       div#progress-bar-ref
-  div#preview.unit.half
 
+div#preview.grid.whole
+
+script type="text/template" id="preview-gen-tmpl"
+  <div class="grid unit whole align-center">
+    <i class='fa fa-cog fa-spin fa-3x'></i>
+    <br />
+    <p>Vorschau wird generiert ...</p>
+  </div>
 script type="application/javascript" src="scan.js"

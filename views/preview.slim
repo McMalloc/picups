@@ -5,10 +5,9 @@ div.grid
       a href="scan"
         i.fa.fa-arrow-left
         span &ensp;Zurück zum Scandialog
-div.grid  
-    - @files.each_with_index do |f, i|
-
-      div.one-third.unit.preview-tile id="tile-#{i}" data-idx="#{i}"
+div.grid
+    - @fpaths.each_with_index do |f, i|
+      div.one-fifth.unit.preview-tile id="tile-#{i}" data-idx="#{i}" data-ignore="0"
         div.ignored.dontdisplay data-idx="#{i}"
           |Wird ignoriert.
           br
@@ -18,14 +17,14 @@ div.grid
           i.fa.fa-times.close-btn data-idx="#{i}"
 
         div.preview-image id="preview-#{i}"
-          img alt="Thumbnails" src="#{f[:thumb_url]}"
+          img alt="Thumbnails" src="#{f[:thumb]}"
 
-        form.proc-form data-idx="#{i}" data-url="#{f[:url]}"
+        form.proc-form data-idx="#{i}" data-source="#{f[:source]}"
           div.cont
-            input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb_url]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
+            input.bw-check id="thresholded-check-#{i}" data-preview="preview-#{i}" data-thumbtarget="#{f[:thumb]}" type="checkbox" name="thresholded-#{i}" value="thresholded"
             label for="thresholded-check-#{i}"
               / i.fa.fa-adjust.pull-right
-              | Gespreiztes Schwarzweiß
+              | Schwarzweiß
 
           div.cont
             / i.fa.fa-file-image-o.pull-right
@@ -39,6 +38,10 @@ div.grid
               label  for="tiff-check-#{i}".tiff
 
     div.whole.unit.form-submit
+      div#pending.pull-right.dontdisplay
+        i.fa.fa-spin.fa-cog
+        span &ensp;
+        span Wird vorbereitet
       button#dl-btn Download
 
 script type="application/javascript" src="process.js"

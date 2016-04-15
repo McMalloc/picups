@@ -1,26 +1,35 @@
 var app = app || {};
 
 $(function() {
-	app.reqPayload = [];
-
+	if (window.location.search === "") {
+		window.location.search = "id="+getCookie("sessionid");
+	}
 	$("#dl-btn").click(function() {
+		app.reqPayload = [];
+		$("#dl-btn").addClass("dontdisplay");
+		$("#pending").removeClass("dontdisplay");
 		$(".proc-form").each(function() {
 			var idx = this.dataset.idx;
 			var format = $("[name='format-"+idx+"']:checked").val();
+			if (parseInt(this.parentNode.dataset.ignore) === 1) {
+				return;
+			}
 			app.reqPayload.push({
 				thresholded: $("[name='thresholded-"+idx+"']").is(":checked"),
 				format: format === undefined ? "jpeg" : format,
 				name: $(".doc-name[data-idx='"+idx+"']").text(),
-				url: this.dataset.url
+				url: this.dataset.source
 			});
 		});
 
-		$.ajax({
+		$.post({
 			url: "/getimages",
 			//contentType: "application/json",
 			type: "post",
 			data: JSON.stringify(app.reqPayload)
 		}).done(function(res) {
+			$("#dl-btn").removeClass("dontdisplay");
+			$("#pending").addClass("dontdisplay");
 			window.location = res;
 		});
 	});
@@ -40,10 +49,9 @@ $(function() {
 
 		var imgCont = $("#"+$this.attr("data-preview"));
 		imgCont.addClass("loading");
-
 		$.post("/switch_thumb", {
-			url: this.parentElement.parentElement.dataset.url,
-			thumb_url: this.dataset.thumbtarget,
+			source: this.parentElement.parentElement.dataset.source,
+			thumb: this.dataset.thumbtarget,
 			thresholded: function() {
 				return $this.is(':checked');
 			}()

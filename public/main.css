@@ -177,6 +177,21 @@ input[type="radio"] + label:hover {
   color: #4AA02C;
 }
 
+/* line 23, ../sass/scan.scss */
+#progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #111;
+  -webkit-transition: width 0.4s;
+  transition: width 0.2s;
+}
+
+/* line 31, ../sass/scan.scss */
+#progress-bar-ref {
+  width: 100%;
+  border-top: 1px solid #9C9C9C;
+}
+
 /* line 1, ../sass/preview.scss */
 .tile-header {
   margin-bottom: 12px;
@@ -189,10 +204,9 @@ input[type="radio"] + label:hover {
 /* line 9, ../sass/preview.scss */
 .doc-name {
   display: inline-block;
-  width: 60%;
 }
 
-/* line 14, ../sass/preview.scss */
+/* line 13, ../sass/preview.scss */
 .preview-tile {
   max-width: 300px;
   margin-right: 24px;
@@ -201,26 +215,30 @@ input[type="radio"] + label:hover {
   transition: box-shadow 0.2s;
   position: relative;
 }
-/* line 22, ../sass/preview.scss */
+/* line 21, ../sass/preview.scss */
 .preview-tile:hover {
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
 }
-/* line 26, ../sass/preview.scss */
+/* line 24, ../sass/preview.scss */
+.preview-tile:hover .proc-form {
+  color: inherit;
+}
+/* line 29, ../sass/preview.scss */
 .preview-tile .proc-form {
   padding: 3px;
 }
-/* line 29, ../sass/preview.scss */
+/* line 32, ../sass/preview.scss */
 .preview-tile .proc-form div.cont {
   padding: 3px;
   margin: 3px;
   background-color: white;
 }
-/* line 30, ../sass/preview.scss */
+/* line 33, ../sass/preview.scss */
 .preview-tile .proc-form div.cont:first-child {
   border-bottom: 1px solid lightgrey;
 }
 
-/* line 40, ../sass/preview.scss */
+/* line 43, ../sass/preview.scss */
 .ignored {
   position: relative;
   color: black;
@@ -236,50 +254,59 @@ input[type="radio"] + label:hover {
   opacity: 0.95;
   z-index: 100;
 }
-/* line 55, ../sass/preview.scss */
+/* line 58, ../sass/preview.scss */
 .ignored:hover {
   color: deeppink;
 }
 
-/* line 60, ../sass/preview.scss */
+/* line 63, ../sass/preview.scss */
 .close-btn {
   float: right;
   visibility: hidden;
   cursor: pointer;
 }
 
-/* line 66, ../sass/preview.scss */
+/* line 69, ../sass/preview.scss */
 .re-button {
   display: inline;
 }
 
-/* line 70, ../sass/preview.scss */
+/* line 73, ../sass/preview.scss */
 .preview-tile:hover .close-btn {
   visibility: visible;
 }
 
-/* line 74, ../sass/preview.scss */
+/* line 77, ../sass/preview.scss */
 .preview-image {
   position: relative;
-  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAP0lEQVQYV43M2QkAIAwEUdPK9l/TtqJEUDxyzfdjpBUi2SVzigBICBfSmQtP5MIXmdBCH/TQBSO0YYYmrCCFA3AUJ6QhAeO1AAAAAElFTkSuQmCC) repeat;
 }
-/* line 78, ../sass/preview.scss */
+/* line 80, ../sass/preview.scss */
 .preview-image:after {
-  content: '\A';
   position: absolute;
+  text-align: center;
+  padding-top: 30%;
+  font-size: 300%;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   background: rgba(255, 255, 255, 0.6);
+  font-family: FontAwesome;
+  content: "\f250";
   opacity: 0;
   transition: all 0.2s;
   -webkit-transition: all 0.2s;
 }
 
-/* line 90, ../sass/preview.scss */
+/* line 96, ../sass/preview.scss */
 .loading:after {
   opacity: 1;
+}
+
+/* line 100, ../sass/preview.scss */
+.proc-form {
+  color: lightgrey;
+  transition: color 0.3s;
 }
 
 /* line 8, ../sass/main.scss */
@@ -341,22 +368,12 @@ a:visited {
   color: darkgray;
 }
 
-/* line 58, ../sass/main.scss */
-#progress-bar {
-  width: 0%;
-  height: 10px;
-  background-color: #111;
-  -webkit-transition: width 0.4s;
-  transition: width 0.2s;
+/* line 59, ../sass/main.scss */
+h1 a:visited {
+  color: inherit;
 }
 
-/* line 66, ../sass/main.scss */
-#progress-bar-ref {
-  width: 100%;
-  border-top: 1px solid #9C9C9C;
-}
-
-/* line 71, ../sass/main.scss */
+/* line 64, ../sass/main.scss */
 pre {
   word-break: break-all;
   background-color: #f3f3f3;
@@ -365,7 +382,7 @@ pre {
   /*box-shadow: inset 2px 2px 7px #eee;*/
 }
 
-/* line 79, ../sass/main.scss */
+/* line 72, ../sass/main.scss */
 footer {
   clear: both;
   position: absolute;
@@ -374,7 +391,7 @@ footer {
   padding-bottom: 4px;
 }
 
-/* line 87, ../sass/main.scss */
+/* line 80, ../sass/main.scss */
 label {
   margin-bottom: 2px;
 }

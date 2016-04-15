@@ -4,10 +4,10 @@ html
     title RPi Scan
     meta name="viewport" content="width=device-width,initial-scale=1"
     script type="application/javascript" src="components/jquery/dist/jquery.js"
+    script type="application/javascript" src="main.js"
     /script type="application/javascript" src="components/moment/moment.js"
     /script type="application/javascript" src="components/moment/locale/de.js"
 
-    link rel="stylesheet" type="text/css" href="components/normalize/normalize.css"
     link rel="stylesheet" type="text/css" href="components/gridism/gridism.css"
     link rel="stylesheet" type="text/css" href="components/fontawesome/css/font-awesome.css"
     link rel="stylesheet" type="text/css" href="main.css"
@@ -15,7 +15,5 @@ html
     div#yield
       == yield
       footer.grid.unit.whole
-        span RPiScan. Scan service for for low power computers and network disabled scanners.
-        br
-        span Running on&nbsp;
-        =settings.info
+        span RPiScan on&ensp;
+        span =settings.info

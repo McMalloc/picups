@@ -19,3 +19,16 @@
     color: #4AA02C;
   }
 }
+
+#progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #111;
+  -webkit-transition: width 0.4s;
+  transition: width 0.2s;
+}
+
+#progress-bar-ref {
+  width: 100%;
+  border-top: 1px solid #9C9C9C;
+}
