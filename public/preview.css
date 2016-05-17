@@ -1,0 +1,116 @@
+/* line 1, ../sass/preview.scss */
+.tile-header {
+  margin-bottom: 12px;
+}
+/* line 4, ../sass/preview.scss */
+.tile-header span[contenteditable="true"] {
+  padding-right: 24px;
+}
+
+/* line 9, ../sass/preview.scss */
+.doc-name {
+  display: inline-block;
+}
+
+/* line 13, ../sass/preview.scss */
+.preview-tile {
+  max-width: 300px;
+  margin-right: 24px;
+  margin-bottom: 28px;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+  position: relative;
+}
+/* line 21, ../sass/preview.scss */
+.preview-tile:hover {
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
+}
+/* line 24, ../sass/preview.scss */
+.preview-tile:hover .proc-form {
+  color: inherit;
+}
+/* line 29, ../sass/preview.scss */
+.preview-tile .proc-form {
+  padding: 3px;
+}
+/* line 32, ../sass/preview.scss */
+.preview-tile .proc-form div.cont {
+  padding: 3px;
+  margin: 3px;
+  background-color: white;
+}
+/* line 33, ../sass/preview.scss */
+.preview-tile .proc-form div.cont:first-child {
+  border-bottom: 1px solid lightgrey;
+}
+
+/* line 43, ../sass/preview.scss */
+.ignored {
+  position: relative;
+  color: black;
+  text-align: center;
+  padding-top: 20%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 0.95;
+  z-index: 100;
+}
+/* line 58, ../sass/preview.scss */
+.ignored:hover {
+  color: deeppink;
+}
+
+/* line 63, ../sass/preview.scss */
+.close-btn {
+  float: right;
+  visibility: hidden;
+  cursor: pointer;
+}
+
+/* line 69, ../sass/preview.scss */
+.re-button {
+  display: inline;
+}
+
+/* line 73, ../sass/preview.scss */
+.preview-tile:hover .close-btn {
+  visibility: visible;
+}
+
+/* line 77, ../sass/preview.scss */
+.preview-image {
+  position: relative;
+}
+/* line 80, ../sass/preview.scss */
+.preview-image:after {
+  position: absolute;
+  text-align: center;
+  padding-top: 30%;
+  font-size: 300%;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.6);
+  font-family: FontAwesome;
+  content: "\f250";
+  opacity: 0;
+  transition: all 0.2s;
+  -webkit-transition: all 0.2s;
+}
+
+/* line 96, ../sass/preview.scss */
+.loading:after {
+  opacity: 1;
+}
+
+/* line 100, ../sass/preview.scss */
+.proc-form {
+  color: lightgrey;
+  transition: color 0.3s;
+}

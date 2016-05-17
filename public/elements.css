@@ -1,0 +1,81 @@
+/* line 1, ../sass/elements.scss */
+select, input[type="text"], span[contenteditable="true"] {
+  padding-bottom: 4px;
+  margin-top: 8px;
+  padding-left: 4px;
+  color: deeppink;
+}
+
+/* line 8, ../sass/elements.scss */
+input[type="text"], span[contenteditable="true"] {
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  font-size: 18px;
+  font-family: serif;
+  transition: border-color 0.4s;
+}
+/* line 15, ../sass/elements.scss */
+input[type="text"]:focus, span[contenteditable="true"]:focus {
+  outline: none;
+  border-bottom: 2px solid deeppink;
+  padding-bottom: 3px;
+}
+
+/* line 22, ../sass/elements.scss */
+input[type="checkbox"] {
+  display: none;
+}
+/* line 26, ../sass/elements.scss */
+input[type="checkbox"] + label:before {
+  font-family: FontAwesome;
+  content: "\f096\2002";
+}
+/* line 33, ../sass/elements.scss */
+input[type="checkbox"]:checked + label:before {
+  color: deeppink;
+  font-family: FontAwesome;
+  content: "\f046\2002";
+}
+
+/* line 41, ../sass/elements.scss */
+input[type="radio"] {
+  display: none;
+}
+/* line 44, ../sass/elements.scss */
+input[type="radio"]:checked + label {
+  background-color: deeppink;
+  color: white;
+}
+/* line 48, ../sass/elements.scss */
+input[type="radio"]:checked + label:after {
+  content: "";
+}
+/* line 52, ../sass/elements.scss */
+input[type="radio"]:checked + label:hover {
+  color: white;
+}
+/* line 57, ../sass/elements.scss */
+input[type="radio"] + label {
+  transition: color 0.2s;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  padding: 1px 3px 3px 3px;
+  border-radius: 2px;
+}
+/* line 64, ../sass/elements.scss */
+input[type="radio"] + label:after {
+  content: "?";
+}
+/* line 68, ../sass/elements.scss */
+input[type="radio"] + label:hover {
+  color: deeppink;
+}
+
+/* line 74, ../sass/elements.scss */
+.form-submit {
+  text-align: right;
+}
+/* line 77, ../sass/elements.scss */
+.form-submit button {
+  padding: 8px 24px;
+}

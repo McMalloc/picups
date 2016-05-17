@@ -1,0 +1,39 @@
+/* line 1, ../sass/scan.scss */
+.status-cont {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* line 6, ../sass/scan.scss */
+.numberbtn {
+  float: right;
+  margin-top: 4px;
+}
+
+/* line 11, ../sass/scan.scss */
+.mod-nr {
+  cursor: pointer;
+}
+/* line 14, ../sass/scan.scss */
+.mod-nr:hover {
+  color: deeppink;
+}
+/* line 18, ../sass/scan.scss */
+.mod-nr:active {
+  color: #4AA02C;
+}
+
+/* line 23, ../sass/scan.scss */
+#progress-bar {
+  width: 0%;
+  height: 10px;
+  background-color: #111;
+  -webkit-transition: width 0.4s;
+  transition: width 0.2s;
+}
+
+/* line 31, ../sass/scan.scss */
+#progress-bar-ref {
+  width: 100%;
+  border-top: 1px solid #9C9C9C;
+}

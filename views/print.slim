@@ -1,0 +1,26 @@
+div.grid
+  div#print-form-cont.unit.half
+    h1 Drucken
+    form#printform action='print' enctype="multipart/form-data" method='POST'
+      p Erlaubte Dateiformate: PDF, JPEG.
+      input name="document" type="file" accept=".pdf,.jpg,.jpeg" value="Datei auswählen"
+
+      p
+        label for="copies-input" Anzahl der Kopien
+        br
+        input#copies-input.one-fifth type="number" name="copies"
+        br
+      p
+        label for="range-input" Bereich (z.B. 1-3,5-9)
+        br
+        input#range-input.one-fifth type="" name="copies"
+        br
+
+      button type="submit" value="Hochladen & Drucken" Hochladen & Drucken
+
+  div#printer-info.unit.half
+    div.fa-stack.fa-large
+      i.fa.fa-circle.fa-stack-2x
+      i.fa.fa-info.fa-stack-1x.fa-inverse
+    div.system-info =@printerinfo
+script type="application/javascript" src="print.js"
