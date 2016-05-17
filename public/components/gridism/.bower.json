@@ -1,0 +1,26 @@
+{
+  "name": "gridism",
+  "version": "0.2.1",
+  "author": "Coby Chapple",
+  "homepage": "http://cobyism.com/gridism",
+  "main": "./gridism.css",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cobyism/gridism.git"
+  },
+  "ignore": [
+    "shapeshifter/",
+    "**/*.yml",
+    "**/*.html"
+  ],
+  "license": "MIT",
+  "_release": "0.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.1",
+    "commit": "022b75c64e0df6f52f75e20c0582d4dceb7227e4"
+  },
+  "_source": "git://github.com/cobyism/gridism.git",
+  "_target": "*",
+  "_originalSource": "gridism"
+}
